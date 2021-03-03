@@ -5,6 +5,7 @@ require("dotenv").config();
 const { graphqlHTTP } = require("express-graphql");
 const schema = require("./schema/schema");
 const resolvers = require("./resolvers/resolvers");
+const routes = require("./routes/routes");
 
 const app = express();
 app.use(
@@ -23,13 +24,14 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.use(
-  "/graphql",
-  graphqlHTTP({
-    schema,
-    rootValue: resolvers,
-    graphiql: true,
-  })
-);
+// app.use(
+//   "/graphql",
+//   graphqlHTTP({
+//     schema,
+//     rootValue: resolvers,
+//     graphiql: true,
+//   })
+// );
+app.use("/", routes);
 
 module.exports = app;

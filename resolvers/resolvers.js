@@ -29,9 +29,7 @@ module.exports = resolvers = {
           divisor = [
             ...divisor,
             {
-              divisor: {
-                [i]: fiveDivisor,
-              },
+              [i]: fiveDivisor,
             },
           ];
         }
@@ -39,14 +37,31 @@ module.exports = resolvers = {
           divisor = [
             ...divisor,
             {
-              divisor: {
-                [i]: threeDivisor + fiveDivisor,
-              },
+              [i]: threeDivisor + fiveDivisor,
             },
           ];
         }
       }
       return divisor;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+  searchText: async () => {
+    let result = [];
+    let textSearched;
+    let subTextsValue = [];
+    try {
+      //   const searchText = await fetch(process.env.TEXT_TO_SEARCH);
+      //   const { text } = await searchText.json();
+      //     const subText = await fetch(process.env.SUB_TEXTS);
+      //     const subTexts = await subText.json();
+      const letter =
+        "Peter told me (actually he slurrred) that peter the pickle piper piped a pitted pickle before he petered out. Phew!";
+      const subString = ["Peter", "peter", "Pick", "Pi", "Z"];
+      let hello = letter.includes('');
+      console.log(hello);
+      return result;
     } catch (error) {
       throw new Error(error);
     }
