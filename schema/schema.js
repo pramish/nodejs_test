@@ -1,14 +1,13 @@
 const { buildSchema } = require("graphql");
 module.exports = schema = buildSchema(`
 
-type DivisibleNumber{
-    divisor: String!
-}
+scalar JSON
+
 type SearchTexts{
     result: String!
 }
 type RootQuery {
-    divisor: [DivisibleNumber]!
+    divisor: JSON
     searchText: [SearchTexts]!
 }
 schema {

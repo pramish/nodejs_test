@@ -1,31 +1,61 @@
 import React, { useState, useEffect } from "react";
-
+import GraphQlClient from "../graphql/api";
+import { getDivisor } from "../graphql/divisor";
+import "./divisor.css";
 export const Divisor = () => {
   const [divisorValue, setDivisorValue] = useState([]);
-  const [dataReady, setDataReady] = useState(false);
-  const getDivisor = async () => {
-    const response = await fetch("http://localhost:9999");
-    const data = await response.json();
-    if (data.success) {
-      setDivisorValue(data.divisor);
-      setDataReady(true);
-      console.log(divisorValue);
-    } else {
-      setDivisorValue([]);
-      setDataReady(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [err, setErr] = useState("");
+  useEffect(() => {
+    async function fetchDivisor() {
+      GraphQlClient.request(getDivisor)
+        .then((data) => {
+          setDivisorValue(data.divisor);
+          setLoading(false);
+          setError(false);
+          setErr("");
+        })
+        .catch((err) => {
+          setDivisorValue([]);
+          setLoading(true);
+          setError(true);
+          setErr("Failed to load the data");
+        });
     }
-  };
+    fetchDivisor();
+    setInterval(() => {
+      fetchDivisor();
+    }, 3000);
+  }, []);
+
+  const displayData = () => (
+    <table>
+      <tbody>
+        <tr>
+          <th>Number</th>
+          <th>String</th>
+        </tr>
+        {divisorValue.map((eachDivisor, index) => (
+          <tr key={`Divisor- ${index}`}>
+            <td>{index}</td>
+            <td>{eachDivisor}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+
   return (
     <div>
-      <h1>Get the Divisor</h1>
-      <button onClick={getDivisor}>Get the Divisor Value</button>
-      {dataReady
-        ? divisorValue.map((eac) => (
-            <p key={Object.keys(eac)}>
-              {Object.keys(eac)}:{Object.values(eac)}
-            </p>
-          ))
-        : "Failed to load data"}
+      {error ? (
+        <p>{err}</p>
+      ) : (
+        <div>
+          <h1>Divisor And the String</h1>
+          {loading ? "Loading..." : displayData()}
+        </div>
+      )}
     </div>
   );
 };

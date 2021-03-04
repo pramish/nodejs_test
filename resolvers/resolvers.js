@@ -19,27 +19,15 @@ module.exports = resolvers = {
       ) {
         throw new Error("Couldn't get the Upper and Lower range of the number");
       }
-      for (var i = rangeData.lower + 1; i <= rangeData.upper; i++) {
-        if (i % 3 === 0) {
-          divisor.push({
-            [i]: fiveDivisor,
-          });
-        }
-        if (i % 5 === 0) {
-          divisor = [
-            ...divisor,
-            {
-              [i]: fiveDivisor,
-            },
-          ];
-        }
+      for (let i = rangeData.lower; i <= rangeData.upper; i++) {
         if (i % 3 === 0 && i % 5 === 0) {
-          divisor = [
-            ...divisor,
-            {
-              [i]: threeDivisor + fiveDivisor,
-            },
-          ];
+          divisor.push(threeDivisor + fiveDivisor);
+        } else if (i % 3 === 0) {
+          divisor.push(threeDivisor);
+        } else if (i % 5 === 0) {
+          divisor.push(fiveDivisor);
+        } else {
+          divisor.push("");
         }
       }
       return divisor;
@@ -59,7 +47,7 @@ module.exports = resolvers = {
       const letter =
         "Peter told me (actually he slurrred) that peter the pickle piper piped a pitted pickle before he petered out. Phew!";
       const subString = ["Peter", "peter", "Pick", "Pi", "Z"];
-      let hello = letter.includes('');
+      let hello = letter.includes("");
       console.log(hello);
       return result;
     } catch (error) {
