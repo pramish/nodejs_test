@@ -8,8 +8,5 @@ How to run this application
    - Inside the client folder, isntall the client dependencies using `yarn install`
 3. Running the application
    - `npm run dev` to start the server and `yarn start` to start the client.
-   - `npm run concurrently` to start the server and client concurrently.
-
-Running the Test
 
 # Happy coding!

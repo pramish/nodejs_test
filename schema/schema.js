@@ -3,12 +3,9 @@ module.exports = schema = buildSchema(`
 
 scalar JSON
 
-type SearchTexts{
-    result: String!
-}
 type RootQuery {
     divisor: JSON
-    searchText: [SearchTexts]!
+    searchText: JSON
 }
 schema {
     query:RootQuery

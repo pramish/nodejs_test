@@ -1,4 +1,6 @@
+const { response } = require("express");
 const fetch = require("node-fetch");
+const SearchAndMatchString = require("../rabin-karp/rabin-karp");
 module.exports = resolvers = {
   divisor: async () => {
     let divisor = [];
@@ -37,19 +39,40 @@ module.exports = resolvers = {
   },
   searchText: async () => {
     let result = [];
-    let textSearched;
-    let subTextsValue = [];
+    let success = false;
+    let message;
+    let finalResult;
     try {
-      //   const searchText = await fetch(process.env.TEXT_TO_SEARCH);
-      //   const { text } = await searchText.json();
-      //     const subText = await fetch(process.env.SUB_TEXTS);
-      //     const subTexts = await subText.json();
-      const letter =
-        "Peter told me (actually he slurrred) that peter the pickle piper piped a pitted pickle before he petered out. Phew!";
-      const subString = ["Peter", "peter", "Pick", "Pi", "Z"];
-      let hello = letter.includes("");
-      console.log(hello);
-      return result;
+      const searchText = await fetch(process.env.TEXT_TO_SEARCH);
+      const text = await searchText.json();
+      const subText = await fetch(process.env.SUB_TEXTS);
+      const subTexts = await subText.json();
+      if (
+        text.text === "Internal server error" ||
+        subTexts.message === "Internal server error"
+      ) {
+        success = false;
+        message = "Server Error";
+      } else {
+        success = true;
+        message = "Data Found";
+        result = await SearchAndMatchString(text.text, subTexts.subTexts);
+        let dataToSend = {
+          candidate: "Pramish Luitel",
+          text: text.text,
+          results: result,
+        };
+        const dataSentJSON = await fetch(process.env.SUBMIT_RESULT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        });
+        finalResult = await dataSentJSON.json();
+      }
+      console.log(finalResult);
+      return finalResult;
     } catch (error) {
       throw new Error(error);
     }

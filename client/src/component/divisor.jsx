@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import GraphQlClient from "../graphql/api";
 import { getDivisor } from "../graphql/divisor";
 import "./divisor.css";
+import { SearchText } from "./searchText";
 export const Divisor = () => {
   const [divisorValue, setDivisorValue] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -48,6 +49,7 @@ export const Divisor = () => {
 
   return (
     <div>
+      <SearchText />
       {error ? (
         <p>{err}</p>
       ) : (
